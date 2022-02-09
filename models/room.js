@@ -6,8 +6,8 @@ const roomSchema = new Schema({
   roomOwner: mongoose.Schema.Types.ObjectId,
   roomType: { type: String, required: true, enum: ["Private", "Shared"] },
   roomAddress: { type: String, required: true },
-  roomProv: { type: String, required: true },
-  roomCom: { type: String, required: true },
+  city: { type: String, required: true },
+  town: { type: String, required: true },
   roomPhotos: { type: [String], required: true, length: 8 },
   roommates: {
     females: Number,

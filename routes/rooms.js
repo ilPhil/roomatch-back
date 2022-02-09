@@ -7,8 +7,9 @@ const mongoose = require('mongoose');
 
 const { ObjectId } = require("mongodb");
 
-router.get("/rooms", async (_, res) => {
-  Room.find()
+router.get("/rooms", async (req, res) => {
+  const query = req.query;
+  Room.find(query)
     .then(docs => {
       res.status(200).json(docs);
     })
