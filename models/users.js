@@ -21,7 +21,8 @@ const userSchema = mongoose.Schema({
   },
   ilike: [mongoose.Schema.Types.ObjectId],
   wholikesme: [mongoose.Schema.Types.ObjectId],
-  address: { type: String },
+  city: { type: String, required: true },
+  town: { type: String, required: true },
   photo: { type: String, required: true },
   roomId: { type: String, default: "" },
   token: { type: String, default: "" }

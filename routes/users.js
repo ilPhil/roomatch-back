@@ -45,7 +45,8 @@ router.post("/users", async (req, res) => {
       party_lover: req.body.iam.party_lover,
       smooker: req.body.iam.smooker,
     },
-    address: req.body.address,
+    city: req.body.city,
+    town: req.body.town,
     photo: req.body.photo,
     roomId: req.body.roomId
   })
