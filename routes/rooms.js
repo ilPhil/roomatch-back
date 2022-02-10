@@ -124,4 +124,48 @@ router.delete("/rooms/:id", async (req, res) => {
     .catch(error => res.status(500).json({ message: error }));
 });
 
+
+router.patch("/rooms/:id/addlike", async (req, res) => {
+  const roomId = req.params["id"];
+
+  Room.findById({ _id: roomId })
+    .then(result => {
+      let wholikesme = result.wholikesme;
+      wholikesme = [...req.body.userId];
+
+      Room.updateOne({ _id: roomId }, { $set: { wholikesme: wholikesme } })
+        .then(result => {
+          // res.status(200).json(result);
+          // roomId = ilike in localestorage + nuovo roomId
+          User.updateOne({ _id: req.body.userId }, { $set: { ilike: roomId } })
+            .then(result => {
+              res.status(200).json(result);
+            });
+        });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error
+      });
+    });
+
+
+  const updateOps = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+  }
+  // {"propName": "wholikesme", "value": [previous + new userId]}
+
+  Room.updateOne({ _id: roomId }, { $set: updateOps })
+    .then(result => {
+      res.status(200).json(result);
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error
+      });
+    });
+});
+
+
 module.exports = router;
