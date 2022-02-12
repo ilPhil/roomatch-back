@@ -6,7 +6,7 @@ const { ObjectId } = require("mongodb");
 
 const Room = require('../models/room')
 const User = require('../models/users')
-const { addRoomToUser, updateRoomPreview } = require('../routes/mixutils')
+const { addRoomToUser, updateRoomPreview, usersInterestedInRoom } = require('../routes/mixutils')
 
 
 router.get("/rooms", async (req, res) => {
@@ -187,6 +187,8 @@ router.patch("/rooms/:id/removelike", async (req, res) => {
 
 /**
  * Returns the list of users who have added the like the specific room
+ * Same result of "/users/:id/wholikesmyroom" 
+ * TODO - evaluate it
  */
 router.get("/rooms/:id/getlikes", async (req, res) => {
   const roomId = req.params["id"];
@@ -194,9 +196,11 @@ router.get("/rooms/:id/getlikes", async (req, res) => {
   Room.findById({ _id: roomId })
     .then(result => {
       User.find().where({ '_id': { $in: result.wholikesme } })
-        .then(usersList => {
-          res.status(200).json(usersList);
-        });
+        .then(users => {
+          const usersList = [];
+          users.forEach(user => usersList.push(usersInterestedInRoom(user)))
+          res.status(200).json(usersList)
+        })
     })
     .catch(error => {
       res.status(500).json({
